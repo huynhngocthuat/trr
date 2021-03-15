@@ -1,0 +1,130 @@
+#include<stdio.h>
+#include<conio.h>
+#define INFINITY 9999
+#define MAX 10
+void dijkstra(int G[MAX][MAX], int n, int finalnode)
+{
+
+	int cost[MAX][MAX], distance[MAX], pred[MAX];
+	int visited[MAX], count, mindistance, nextnode, i, j;
+
+	//pred[]   luu cac dinh ma khoang cach ngan nhat tu no den dinh nguon
+	//count    Dem so nut ma di qua den den dich
+	//cost[][] Tao ma tran trong so
+	for (i = 0; i<n; i++)
+		for (j = 0; j<n; j++)
+			if (G[i][j] == 0)
+				cost[i][j] = INFINITY;
+			else
+				cost[i][j] = G[i][j];
+
+	//Khoi tao mang pred[], distance[] and visited[]
+	for (i = 0; i<n; i++)
+	{
+		distance[i] = cost[finalnode][i];
+		pred[i] = finalnode;.
+		visited[i] = 0;
+	}
+
+	distance[finalnode] = 0;
+	visited[finalnode] = 1;
+	count = 1;
+
+	while (count < n-1)
+	{
+		mindistance = INFINITY;
+
+		//Nut ke tiep co khoang cach nho nhat
+		for (i = 0; i<n; i++)
+			if (distance[i]<mindistance && !visited[i])
+			{
+				mindistance = distance[i];
+				nextnode = i;
+			}
+
+		//Kiem tra neu co duong dan tot hon: tinh lai khoang cach cac nut chua duoc tham      
+		visited[nextnode] = 1;
+		for (i = 0; i<n; i++)
+			if (!visited[i])
+				if (mindistance + cost[nextnode][i]<distance[i])
+				{
+					distance[i] = mindistance + cost[nextnode][i];
+					pred[i] = nextnode;
+				}
+		count++;
+	}
+
+	//In ra duong di va khoang cach den moi nut
+	for (i = 0; i<n; i++)
+		if (i != finalnode)
+		{
+			printf("\nKhoang cach tu nut %d = %d", i+1, distance[i]);
+			int k = 1;
+			j = i;
+			while(j != finalnode)
+			{
+				k++;
+				j = pred[j];
+			}
+			printf("\nSo dinh di qua : %d ", k);
+			printf("\nDuong di : %d", i+1);
+
+			j = i;
+			do
+			{
+				j = pred[j];
+				printf(" <- %d", j+1);
+			} 
+			while (j != finalnode);
+			printf("\n");
+		}
+}
+//void dijkstra(int G[MAX][MAX], int n, int startnode);
+// Xuat ket qua ma tran ke cua do thi ra man hinh.
+
+
+//void XuatMTKe(int G[][MAX], int n){
+//	printf("\nMa tran ke:\n");
+//	for (int i = 0; i<n; i++){
+//		for (int j = 0; j<n; j++)
+//			printf("%3d ", G[i][j]);
+//		printf("\n");
+//	}
+//}
+
+int main()
+{
+	int G[MAX][MAX], i, j, n, u;
+	printf("Nhap vao so dinh cua do thi:");
+	scanf("%d", &n);
+	printf("\nNhap vao ma tran ke cua do thi:\n");
+
+	for (i = 0; i<n; i++){
+		for (j = 0; j<n; j++){
+			printf("a[%d][%d] = ",i+1,j+1);
+			scanf("%d", &G[i][j]);
+		}
+			printf("\n");
+	}
+			
+//	FILE *f = fopen("input.txt", "rt");
+//	if (f == NULL){
+//		printf("Doc file loi !!!");
+//		return 0;
+//	}
+//	fscanf(f, "%d", &n);
+//	for (int i = 0; i<n; i++)	{
+//		for (int j = 0; j<n; j++){
+//			fscanf(f, "%d", &(G[i][j]));
+//		}
+//	}
+//
+//	XuatMTKe(G, n);
+
+	printf("\nNhap vao nut nguon:");
+	scanf("%d", &u);
+	dijkstra(G, n, u-1);
+
+	return 0;
+}
+
